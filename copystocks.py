@@ -45,5 +45,6 @@ class WebCrawlerCoinMarket():
             crypto_stocks.prive_graph_7_days = cells[7].find('img')['src']
 
             session.add(crypto_stocks)
+            session.commit()
 
-        session.commit()
+            crypto_stocks = CryptoModel()
