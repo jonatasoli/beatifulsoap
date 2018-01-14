@@ -3,4 +3,4 @@ import unittest
 
 
 class TestCopyStocks(unittest.TestCase):
-    WebCrawlerCoinMarket.save_data()
+    WebCrawlerCoinMarket.crawler_coins()

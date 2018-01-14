@@ -2,33 +2,37 @@ import requests
 from bs4 import BeautifulSoup
 from sqlalchemy.orm import sessionmaker
 from model import CryptoModel
+from connection import CreateConnection
 from sqlalchemy import create_engine
 
 
-class WebCrawlerCoinMarket(CryptoModel):
+class WebCrawlerCoinMarket():
 
-    def save_data():
 
-        engine = create_engine(
-            'mysql://db_html:BNN5BgC2gBsZJ46N@soap.czepwkmln8k1.sa-east-1.rds.amazonaws.com/dbsoap'
-            )
+    def crawler_coins():
 
+        request = WebCrawlerCoinMarket.capture_request()
+        request_html = request.content
+        soup = BeautifulSoup(request_html, "html.parser")
+        WebCrawlerCoinMarket.save_data(soup)
+
+        print("Stocks Create Succefull!")
+
+
+    def capture_request():
         try:
             request = requests.get("https://coinmarketcap.com/", timeout=5)
         except requests.exceptions.RequestException as e:
             print (e)
             sys.exit(1)
+        return request
 
-        list_stocks = []
+
+    def save_data(soup):
+        engine = CreateConnection.create()
         crypto_stocks = CryptoModel()
         Session = sessionmaker(bind = engine)
         session = Session()
-
-
-        request_html =request .content
-        request_html = request.content
-        soup = BeautifulSoup(request_html, "html.parser")
-
         body_html = soup.find("tbody")
         for row in body_html.findAll("tr"):
             cells = row.findAll("td")
@@ -43,5 +47,3 @@ class WebCrawlerCoinMarket(CryptoModel):
             session.add(crypto_stocks)
 
         session.commit()
-
-        print("Stocks Create Succefull!")
