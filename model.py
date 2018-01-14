@@ -13,4 +13,4 @@ class CryptoModel(CreateModel):
         change_24h = self.change_24h
         prive_graph_7_days = self.prive_graph_7_days
 
-mapper(CryptoModel, table_crypto)
+mapper(CryptoModel, CreateModel.table_crypto)

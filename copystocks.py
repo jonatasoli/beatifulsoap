@@ -2,11 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 from sqlalchemy.orm import sessionmaker
 from model import CryptoModel
+from sqlalchemy import create_engine
 
 
 class WebCrawlerCoinMarket(CryptoModel):
 
     def save_data():
+
+        engine = create_engine(
+            'mysql://db_html:BNN5BgC2gBsZJ46N@soap.czepwkmln8k1.sa-east-1.rds.amazonaws.com/dbsoap'
+            )
 
         try:
             request = requests.get("https://coinmarketcap.com/", timeout=5)
@@ -31,11 +36,11 @@ class WebCrawlerCoinMarket(CryptoModel):
             crypto_stocks.market_cap = cells[2].text.strip(" \n")
             crypto_stocks.price = cells[3].text.strip(" \n")
             crypto_stocks.volume_24h = cells[4].text.strip(" \n")
-            crypto_stocks.circulatins_supply= cells[5].text.strip(" \n")
+            crypto_stocks.circulations_supply= cells[5].text.strip(" \n")
             crypto_stocks.change_24h = cells[6].text.strip(" \n")
             crypto_stocks.prive_graph_7_days = cells[7].find('img')['src']
 
-            session.add(crypto_stock)
+            session.add(crypto_stocks)
 
         session.commit()
 
